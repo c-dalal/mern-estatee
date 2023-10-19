@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {useRef,useState,useEffect} from 'react';
 import {getDownloadURL, getStorage}  from 'firebase/storage';
 import {app} from '../firebase';
+import {Link} from 'react-router-dom';
 import {
   deleteUserFailure,
   deleteUserStart,
@@ -135,6 +136,7 @@ const dispatch = useDispatch();
       <input onChange={handleChange} type='text' default = {currentUser.email} placeholder='email' id='email' className='border p-3 rounded-lg'/>
         <input type='password' placeholder='password' id='password' className='border p-3 rounded-lg'/>
         <button disable={loading} className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacit-80 ' >{loading? 'loading...': 'Update'}</button>
+        <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={"/create-listing"}>Create Listing</Link>
         </form>
 
         <div className="flex justify-between mt-5">
