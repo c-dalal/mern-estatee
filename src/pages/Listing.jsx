@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
+import Contact from '../components/Contact';
 import {useParams} from 'react-router-dom';
 // import {Swiper, SwiperSlide} from 'swiper/react';
-import { Navigation } from 'react-router-dom';
+import { Navigation } from 'swiper/modules';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 import SwiperCore from 'swiper/modules';
 import 'swiper/css/bundle';
+import { FaBed, FaParking } from 'react-icons/fa';
 
 const Listing = () => {
     SwiperCore.use([Navigation]);
     const[listing,setListing] = useState(null);
     const[loading,setLoading] = useState(false);
     const[error,setError] = useState(false);
+    const[contact,setContact] = useState(false);
     const params = useParams();
+    const {currentUser} = useSelector((state) => state.user);
     useEffect(()=>{
         const fetchListing = async () => {
             try{
@@ -45,13 +50,63 @@ const Listing = () => {
                 <Swiper navigation>
                     {listing.imageUrls.map((url) => {
                         <SwiperSlide key={url}>
-                                <div className='h-[550px]' style={{background: `url(${url}) center no-repeat`, 
-                            backgroundSize: 'cover'}} >
+                                <div 
+                                className='h-[550px]' 
+                                style={{background: `url(${url}) center no-repeat`, 
+                                backgroundSize: 'cover'}} >
 
                                 </div>
                         </SwiperSlide>
                     })}
                 </Swiper>
+
+                    <div className='flex gap-4'>
+                        <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+                            {
+                                listing.type === 'rent' ? 'For Rent' : 'For Sale'
+                            }
+
+                        </p>
+                        {
+                            listing.offer && (
+                                <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+                                    ${+listing.regularPrice - +listing.discountPrice}
+                                </p>
+                            )
+                        }
+                    </div>
+                        <p className='text-slate-800 '>
+                            <span className='font-semibold text-black'>Description - {' '}</span>
+                            {listing.description} </p>
+                                <ul className='text-green-900 font-semibold text-sm flex item-center gap-4 sm:gap-6'>
+                                     <li className='flex items-center gap-1 whitespace-nowrap text-green-900 font-semibold text-sm'>
+                                        <FaBed className='text-lg'/>{
+                                            listing.bedrooms > 1 ? `${listing.bedrooms} beds ` : ` ${listing.bedrooms} bed `
+                                        }
+                                     </li>
+                                      <li className='flex items-center gap-1 whitespace-nowrap text-green-900 font-semibold text-sm'>
+                                        <FaBath className='text-lg'/>{
+                                            listing.bedrooms > 1 ? `${listing.bathrooms} baths ` : ` ${listing.bathrooms} baths `
+                                        }
+                                     </li>
+                                      <li className='flex items-center gap-1 whitespace-nowrap text-green-900 font-semibold text-sm'>
+                                        <FaParking className='text-lg'/>{ 
+                                            listing.parking  ? "Parking Spot" :  "No Parking"
+                                        }
+                                     </li>
+                                      <li className='flex items-center gap-1 whitespace-nowrap text-green-900 font-semibold text-sm'>
+                                        <FaChair className='text-lg'/>{
+                                            listing.furnished  ? 'Furnished' : 'UnFunrnished'
+                                        }
+                                     </li>
+                                </ul>
+                          {currentUser && listing.userRef !== currentUser._id &&   
+                          <button onClick={() => setContact(true)} className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'>
+                                Contact Landlord
+                            </button>}
+
+                                {contact && <Contact listing={listing}/>}
+
                 </div>
             )
         }
