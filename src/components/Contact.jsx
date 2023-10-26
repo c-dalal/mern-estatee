@@ -26,7 +26,7 @@ function Contact({listing}) {
                 <p>Contact <span className='font-semibold'>{landlord.username} for <span className='font-semibold'>{listing.name.toLowerCase()}</span></span></p>
                 <textarea name="message" id="" cols="30"  rows="2" 
                 onChange={onChange}
-                placeholder='Enter your message here....'
+                placeholder='Enter yo ur message here....'
                 className='w-full border p-3 rounded-lg mt-2'
                 value={message}></textarea>
 
